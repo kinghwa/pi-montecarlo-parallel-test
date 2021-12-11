@@ -58,17 +58,20 @@ stopwatch.Restart();
 Parallel.For(0, numThreads, new ParallelOptions { MaxDegreeOfParallelism = numThreads },
 i => 
 {
+    int inCircle = 0;
+    int inSquare = 0;
     for (long j = 0; j < innerCnt; j++)
     {
         x = rnd.NextDouble();
         y = rnd.NextDouble();
         if (Math.Sqrt(x * x + y * y) <= 1.0)
         {
-            Interlocked.Increment(ref pointInCircle);
+            inCircle++;
         }
-
-        Interlocked.Increment(ref pointInSquare);
+        inSquare++;       
     }
+    Interlocked.Add(ref pointInCircle, inCircle);
+    Interlocked.Add(ref pointInSquare, inSquare);
 });
 pi = 4.0 * pointInCircle / pointInSquare;
 stopwatch.Stop();
